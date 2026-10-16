@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shubhanshu's Vault</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--panel:#0d0d0f;--line:#232327;--text:#ecebe6;--mute:#8a8a92;--accent:#9cc4e4;--danger:#e5604d;
+  --body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;--wide:'Syncopate','Arial Narrow',sans-serif}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--body)}
+body{overflow-x:hidden}
+.hidden{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* full-screen steps */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:safe center;
+  padding:calc(8vh + 12px) 24px;text-align:center;background:var(--bg);transition:opacity .9s ease;overflow-y:auto}
+.screen>*{position:relative;z-index:1}
+.screen>.spot{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 55% 75% at 50% 0%,rgba(190,215,240,.30),rgba(190,215,240,.08) 55%,transparent 78%);
+  animation:flick 7s infinite}
+@keyframes flick{0%,100%{opacity:1}46%{opacity:1}47%{opacity:.55}49%{opacity:.95}51%{opacity:.65}53%{opacity:1}}
+.screen.out{opacity:0;pointer-events:none}
+
+/* intro */
+#intro .line{height:1px;width:0;background:linear-gradient(90deg,transparent,#fff,transparent);
+  box-shadow:0 0 18px rgba(255,255,255,.55);animation:draw 1.5s cubic-bezier(.6,0,.2,1) .4s forwards}
+@keyframes draw{to{width:min(72vw,520px)}}
+#title{margin-top:34px;font-family:var(--wide);font-size:clamp(.74rem,3.4vw,1.5rem);letter-spacing:.42em;
+  text-shadow:0 0 26px rgba(255,255,255,.35);line-height:2.2}
+#title .w{display:inline-block;white-space:nowrap;margin:0 .35em}
+#title .c{display:inline-block;opacity:0;filter:blur(12px);transform:translateY(8px);
+  animation:rise 1s ease forwards}
+@keyframes rise{to{opacity:1;filter:blur(0);transform:none}}
+
+/* gate + password */
+h1{font-family:var(--wide);font-weight:400;font-size:clamp(.95rem,4.2vw,1.5rem);letter-spacing:.14em;line-height:1.6;margin:14px 0 10px}
+
+/* reacting character */
+.char{--lidL:0;--lidR:0;--blY:0px;--blR:0deg;--brY:0px;--brR:0deg;--hand:90px;--hatY:0px;--hatR:0deg;
+  width:min(46vw,190px);aspect-ratio:1;cursor:pointer;filter:drop-shadow(0 0 26px rgba(156,196,228,.2));
+  animation:breathe 4.2s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
+@keyframes breathe{50%{transform:translateY(-5px)}}
+.char svg{width:100%;height:100%;overflow:visible;display:block}
+.char .ink{fill:#0e0e10;stroke:var(--text);stroke-width:2;stroke-linejoin:round}
+.char .line,.char .m,.char .brow,.char .band{fill:none;stroke:var(--text);stroke-width:3;stroke-linecap:round}
+.char .band{stroke:var(--accent);stroke-width:4}
+.char .sclera{fill:#f1f0ea}
+.char .pp{transition:transform .14s ease-out}
+.char .pc{fill:#050505;transform-box:fill-box;transform-origin:center;transition:transform .25s}
+.char .lid{fill:#0e0e10;transform-box:fill-box;transform-origin:50% 0;transition:transform .2s}
+.char .lidL{transform:scaleY(var(--lidL))}
+.char .lidR{transform:scaleY(var(--lidR))}
+.char .brow{transform-box:fill-box;transform-origin:center;transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
+.char .bl{transform:translateY(var(--blY)) rotate(var(--blR))}
+.char .br{transform:translateY(var(--brY)) rotate(var(--brR))}
+.char .m{opacity:0;transition:opacity .15s}
+.char .hat{transform:translateY(var(--hatY)) rotate(var(--hatR));transform-box:fill-box;transform-origin:50% 100%;
+  transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
+.char .hand{transform:translateY(var(--hand));transition:transform .45s cubic-bezier(.3,1.3,.5,1)}
+.char .hand rect{fill:#17171b;stroke:var(--text);stroke-width:1.6}
+.char .shades{opacity:0;transform:translateY(-30px);transition:transform .5s cubic-bezier(.3,1.4,.5,1),opacity .25s}
+.char .shades rect,.char .shades path{fill:#000;stroke:var(--text);stroke-width:2}
+.char .sweat{fill:var(--accent);opacity:0;transition:opacity .2s}
+.char[data-mood=sus]{--lidL:.25;--lidR:.5;--blY:-8px;--blR:-8deg;--brY:3px;--brR:12deg}
+.char[data-mood=narrow]{--lidL:.55;--lidR:.55;--blY:3px;--blR:12deg;--brY:3px;--brR:-12deg}
+.char[data-mood=happy]{--blY:-7px;--brY:-7px}
+.char[data-mood=peek]{--hand:0px;--blY:-5px;--brY:-5px}
+.char[data-mood=whistle]{--hand:0px;--blY:-8px;--brY:-3px;--brR:-8deg;--hatR:-3deg}
+.char[data-mood=shock]{--blY:-11px;--brY:-11px;--hatY:-16px;--hatR:-8deg}
+.char[data-mood=angry]{--lidL:.4;--lidR:.4;--blY:4px;--blR:20deg;--brY:4px;--brR:-20deg;--hatY:4px}
+.char[data-mood=cool]{--blY:-5px;--brY:-5px}
+.char[data-mood=sus] .m-smirk,.char[data-mood=narrow] .m-flat,.char[data-mood=peek] .m-flat,
+.char[data-mood=happy] .m-smile,.char[data-mood=cool] .m-smile,.char[data-mood=whistle] .m-o,
+.char[data-mood=shock] .m-o,.char[data-mood=angry] .m-frown{opacity:1}
+.char[data-mood=shock] .pc{transform:scale(.55)}
+.char[data-mood=shock] .sweat{opacity:1;animation:drip 1s ease-in infinite}
+.char[data-mood=cool] .shades{opacity:1;transform:none}
+@keyframes drip{from{transform:translateY(-4px)}to{transform:translateY(10px)}}
+.char.blink{--lidL:1;--lidR:1}
+.pool{width:min(60vw,260px);height:22px;border-radius:50%;margin-top:-4px;
+  background:radial-gradient(ellipse at center,rgba(190,215,240,.30),transparent 70%)}
+.sub{color:var(--mute);max-width:34ch;line-height:1.5}
+.row{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap;justify-content:center}
+.btn{border:1px solid var(--line);background:var(--panel);padding:13px 24px;border-radius:12px;font-weight:500;
+  transition:border-color .2s,background .2s}
+.btn:hover{border-color:#44444a}
+.btn.primary{background:var(--text);color:#000;border-color:var(--text);font-weight:700}
+.btn.danger{color:var(--danger)}
+.btn.sm{padding:7px 12px;font-size:.82rem;border-radius:9px}
+
+.passwrap{margin-top:26px;width:min(88vw,340px)}
+.passwrap input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--text);font:inherit;text-align:center;letter-spacing:.12em}
+.passwrap input::placeholder{letter-spacing:0;color:var(--mute)}
+.passwrap.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+#msg{min-height:1.5em;margin-top:14px;color:var(--accent);font-size:.95rem}
+#msg.bad{color:var(--danger)}
+.bubble{max-width:min(84vw,330px);margin-top:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:9px 14px;font-size:.85rem;color:var(--mute);line-height:1.4}
+#welcome h1{font-family:var(--wide);font-size:clamp(1.1rem,5vw,2rem);letter-spacing:.2em;line-height:1.6}
+
+/* app */
+#app{min-height:100%;padding:calc(18px + env(safe-area-inset-top,0px)) 18px 60px;max-width:1200px;margin:0 auto;animation:fade 1s ease}
+@keyframes fade{from{opacity:0}}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding-bottom:18px;border-bottom:1px solid var(--line)}
+.brand{font-family:var(--wide);font-size:.8rem;letter-spacing:.3em}
+.chip{font-size:.78rem;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:4px 10px;margin-left:10px}
+.chip.owner{color:var(--accent);border-color:#2c4457}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+#notice{margin:16px 0;padding:12px 14px;border:1px solid #5a3b2f;border-radius:12px;color:#e8b8a6;font-size:.9rem;line-height:1.5}
+#uploads{display:grid;gap:8px;margin-top:16px}
+.up{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.85rem}
+.bar{height:4px;background:var(--line);border-radius:4px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-top:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.thumb{position:relative;aspect-ratio:1;background:#050507;cursor:pointer;border:0;padding:0;width:100%;display:block}
+.thumb img,.thumb video{width:100%;height:100%;object-fit:cover;display:block}
+.thumb.locked img,.thumb.locked video{filter:blur(22px) brightness(.6);transform:scale(1.15)}
+.badge{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.7);border-radius:8px;padding:3px 8px;font-size:.74rem}
+.lockmark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.meta{padding:10px 12px 4px}
+.name{font-size:.9rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.info{font-size:.76rem;color:var(--mute);margin-top:2px;display:block}
+.acts{display:flex;gap:6px;padding:8px 12px 12px;flex-wrap:wrap}
+#empty{margin-top:60px;text-align:center;color:var(--mute);line-height:1.6}
+
+/* viewer + modal */
+#viewer,#modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}
+#viewer{background:rgba(0,0,0,.96);flex-direction:column;gap:14px}
+#viewer img,#viewer video{max-width:100%;max-height:78vh;border-radius:8px}
+#viewer .cap{color:var(--mute);font-size:.9rem}
+#viewer .x{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px}
+#modal{background:rgba(0,0,0,.75);z-index:60}
+.box{width:min(92vw,380px);background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+.box h2{font-size:1.1rem;margin-bottom:8px}
+.box p{color:var(--mute);font-size:.9rem;line-height:1.5}
+.box input{width:100%;margin-top:14px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#000;color:var(--text);font:inherit}
+.box .row{margin-top:18px;justify-content:flex-end}
+
+/* cinematic layer */
+#title{animation:push 8s ease-out forwards}
+@keyframes push{from{transform:scale(.96)}to{transform:scale(1.04)}}
+body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;transition:opacity 1.5s;
+  background:radial-gradient(ellipse at 50% 45%,transparent 42%,rgba(0,0,0,.78))}
+body.inapp::before{opacity:.35}
+body::after{content:"";position:fixed;inset:-50%;z-index:100;pointer-events:none;opacity:.07;animation:grain .9s steps(6) infinite;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-5%,3%)}40%{transform:translate(4%,-6%)}
+  60%{transform:translate(-3%,5%)}80%{transform:translate(6%,2%)}100%{transform:translate(0,0)}}
+.lbx{position:fixed;left:0;right:0;height:0;background:#000;z-index:98;transition:height 1.8s cubic-bezier(.6,0,.2,1)}
+.lbx-t{top:0}.lbx-b{bottom:0}
+body.cine .lbx{height:8vh}
+#pass h1{margin-top:12px}
+
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="lbx lbx-t"></div><div class="lbx lbx-b"></div>
+
+<!-- 1. Intro -->
+<section id="intro" class="screen">
+  <div class="line"></div>
+  <div id="title" aria-label="Design by Shubhanshu"></div>
+</section>
+
+<!-- 2. Gate -->
+<section id="gate" class="screen hidden out">
+  <div class="spot"></div>
+  <div class="char" id="gateChar" data-mood="sus"></div><div class="pool"></div>
+  <h1>Are you SHUBHANSHU?</h1>
+  <p class="sub">Soch samajh ke jawab dena. Hum sab dekh rahe hain.</p>
+  <div class="row">
+    <button id="yes" class="btn primary">Haan, main hi hoon</button>
+    <button id="no" class="btn">Nahi</button>
+  </div>
+</section>
+
+<!-- 3. Password -->
+<section id="pass" class="screen hidden out">
+  <div class="spot"></div>
+  <div class="char" id="passChar" data-mood="peek"></div><div class="pool"></div>
+  <h1>Password daal</h1>
+  <div class="bubble" id="bubble">Psst… main dekh nahi raha.</div>
+  <div class="passwrap" id="pw">
+    <input id="pwInput" type="password" placeholder="Chupke se type kar…" autocomplete="off" autocapitalize="off" spellcheck="false">
+  </div>
+  <div id="msg"></div>
+  <div class="row" style="margin-top:18px">
+    <button id="enter" class="btn primary">Andar jao</button>
+    <button id="back" class="btn">Wapas</button>
+  </div>
+</section>
+
+<!-- 4. Welcome -->
+<section id="welcome" class="screen hidden out">
+  <div class="spot"></div>
+  <div class="char" id="welChar" data-mood="happy"></div><div class="pool"></div>
+  <h1>Welcome<br>SHUBHANSHU</h1>
+  <p class="sub">Vault khul gaya.</p>
+</section>
+
+<!-- 5. App -->
+<main id="app" class="hidden">
+  <header>
+    <div><span class="brand">VAULT</span><span id="chip" class="chip">Guest · sirf dekh sakte ho</span></div>
+    <div class="tools" id="tools"></div>
+  </header>
+  <div id="notice" class="hidden"></div>
+  <div id="uploads"></div>
+  <div id="grid"></div>
+  <p id="empty" class="hidden"></p>
+  <input id="file" type="file" accept="image/*,video/*" multiple class="hidden">
+</main>
+
+<div id="viewer" class="hidden"></div>
+<div id="modal" class="hidden"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script>
+/* ============ SETUP: Firebase config yahan paste karo ============ */
+const firebaseConfig = {
+  apiKey: "PASTE_API_KEY",
+  authDomain: "PASTE_PROJECT.firebaseapp.com",
+  projectId: "PASTE_PROJECT_ID",
+  storageBucket: "PASTE_PROJECT.appspot.com",
+  messagingSenderId: "PASTE_SENDER_ID",
+  appId: "PASTE_APP_ID"
+};
+// Owner password ka SHA-256 hash (plain text nahi rakha)
+const OWNER_HASH = "04ddbe65b992d4f7c727a2a0920b7c8a99d286fa789e3eb0cde456ac18911881";
+const MAX_MB = 200;
+/* ================================================================= */
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sha = async t => {
+  if(!crypto.subtle) throw new Error('Page ko https ya localhost se kholo');
+  const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+  return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,'0')).join('');
+};
+const fmtSize = n => n > 1e6 ? (n/1e6).toFixed(1)+' MB' : Math.max(1,Math.round(n/1e3))+' KB';
+const fmtDate = ts => ts ? new Date(ts.toMillis()).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : 'abhi';
+
+let owner = false, items = [];
+const configured = !firebaseConfig.apiKey.startsWith('PASTE');
+let db, storage;
+if (configured) {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  storage = firebase.storage();
+}
+
+/* ---------- screen switching ---------- */
+const screens = ['intro','gate','pass','welcome'].map(id => $('#'+id));
+function show(id){
+  screens.forEach(s => {
+    if (s.id === id){ s.classList.remove('hidden'); requestAnimationFrame(()=>s.classList.remove('out')); }
+    else { s.classList.add('out'); setTimeout(()=>{ if(s.classList.contains('out')) s.classList.add('hidden'); },950); }
+  });
+}
+function openApp(){
+  screens.forEach(s => { s.classList.add('out'); setTimeout(()=>s.classList.add('hidden'),950); });
+  document.body.classList.remove('cine'); document.body.classList.add('inapp');
+  $('#app').classList.remove('hidden');
+  renderTools(); render();
+}
+
+/* ---------- 1. cinematic intro ---------- */
+(function buildTitle(){
+  let i = 0;
+  $('#title').innerHTML = 'DESIGN BY SHUBHANSHU'.split(' ').map(w =>
+    '<span class="w">' + [...w].map(ch => `<span class="c" style="animation-delay:${(1.7 + (i++)*0.07).toFixed(2)}s">${ch}</span>`).join('') + '</span>'
+  ).join(' ');
+})();
+requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('cine')));
+setTimeout(()=>{ $('#intro').classList.add('out'); setTimeout(()=>show('gate'),900); }, 5800);
+
+/* ---------- 2. gate ---------- */
+/* ---------- reacting character (detective) ---------- */
+const CHAR = `<svg viewBox="0 0 200 200" aria-hidden="true">
+<path class="ink" d="M24 200 Q28 148 100 146 Q172 148 176 200Z"/>
+<path class="line" d="M84 150 L100 176 L116 150"/>
+<ellipse class="ink" cx="100" cy="102" rx="52" ry="56"/>
+<g transform="translate(78,100)"><ellipse class="sclera" rx="14" ry="12"/><g class="pp"><circle class="pc" r="6.5"/></g><rect class="lid lidL" x="-15" y="-13" width="30" height="26"/></g>
+<g transform="translate(122,100)"><ellipse class="sclera" rx="14" ry="12"/><g class="pp"><circle class="pc" r="6.5"/></g><rect class="lid lidR" x="-15" y="-13" width="30" height="26"/></g>
+<g transform="translate(78,80)"><path class="brow bl" d="M-14 0 L14 0"/></g>
+<g transform="translate(122,80)"><path class="brow br" d="M-14 0 L14 0"/></g>
+<g transform="translate(100,138)">
+<path class="m m-flat" d="M-16 0 L16 0"/><path class="m m-smirk" d="M-16 3 Q0 5 16 -5"/>
+<path class="m m-smile" d="M-20 -2 Q0 18 20 -2"/><ellipse class="m m-o" rx="7" ry="9"/><path class="m m-frown" d="M-18 8 Q0 -6 18 8"/></g>
+<g class="hat"><ellipse class="ink" cx="100" cy="62" rx="70" ry="11"/>
+<path class="ink" d="M60 62 Q58 20 100 20 Q142 20 140 62"/><path class="band" d="M61 53 Q100 61 139 53"/></g>
+<g class="shades"><rect x="58" y="89" width="38" height="22" rx="8"/><rect x="104" y="89" width="38" height="22" rx="8"/><path d="M96 98 H104"/></g>
+<g transform="translate(78,100)"><g class="hand"><rect x="-17" y="-15" width="34" height="13" rx="6"/><rect x="-17" y="2" width="34" height="13" rx="6"/></g></g>
+<g transform="translate(122,100)"><g class="hand"><rect x="-17" y="-15" width="34" height="13" rx="6"/><rect x="-17" y="2" width="34" height="13" rx="6"/></g></g>
+<path class="sweat" d="M152 64 q-7 11 0 15 q7 -4 0 -15z"/>
+</svg>`;
+const LOCKS = { whistle:{x:-4, y:-4.5} };
+let lastX = innerWidth/2, lastY = innerHeight/2;
+function look(x,y){
+  document.querySelectorAll('.char').forEach(c => {
+    if(!c.offsetWidth) return;
+    c.querySelectorAll('.pp').forEach(p => {
+      let tx = 0, ty = 0;
+      if(c._lock){ tx = c._lock.x; ty = c._lock.y; }
+      else {
+        const r = p.parentElement.getBoundingClientRect();
+        const dx = x - (r.left + r.width/2), dy = y - (r.top + r.height/2);
+        const a = Math.atan2(dy,dx), d = Math.min(1, Math.hypot(dx,dy)/160) * 5;
+        tx = Math.cos(a)*d; ty = Math.sin(a)*d;
+      }
+      p.style.transform = `translate(${tx}px,${ty}px)`;
+    });
+  });
+}
+function setMood(c,m){ c.dataset.mood = m; c._lock = LOCKS[m] || null; look(lastX,lastY); }
+document.querySelectorAll('.char').forEach(c => {
+  c.innerHTML = CHAR; setMood(c, c.dataset.mood);
+  c.addEventListener('click', () => {            // poke the character
+    const prev = c.dataset.mood; if(prev === 'shock') return;
+    setMood(c,'shock'); setTimeout(()=>setMood(c,prev),700);
+  });
+});
+addEventListener('pointermove', e => { lastX = e.clientX; lastY = e.clientY; look(lastX,lastY); });
+addEventListener('touchmove', e => { lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; look(lastX,lastY); }, {passive:true});
+(function blink(){ setTimeout(()=>{
+  document.querySelectorAll('.char').forEach(c => c.classList.add('blink'));
+  setTimeout(()=>document.querySelectorAll('.char').forEach(c => c.classList.remove('blink')),140);
+  blink(); }, 2200 + Math.random()*3000); })();
+const gateChar = $('#gateChar'), passChar = $('#passChar'), welChar = $('#welChar');
+
+/* ---------- 2. gate ---------- */
+$('#yes').addEventListener('pointerenter', () => setMood(gateChar,'narrow'));
+$('#no').addEventListener('pointerenter', () => setMood(gateChar,'happy'));
+['#yes','#no'].forEach(s => $(s).addEventListener('pointerleave', () => setMood(gateChar,'sus')));
+$('#no').onclick = () => { owner = false; openApp(); };
+$('#yes').onclick = () => { setMood(passChar,'peek'); show('pass'); $('#pwInput').value=''; setMsg(''); setTimeout(()=>$('#pwInput').focus(),600); startPeek(); };
+
+/* ---------- 3. password with peeking eyes ---------- */
+const peekLines = [
+  'Psst… main dekh nahi raha.',
+  'Padosi ne screen dekh li kya?',
+  'Aankh band hai… bas thodi si khuli hai.',
+  'Deewaron ke bhi kaan hote hain, dheere type kar.',
+  'Camera ghuma le bhai.',
+  'Mummy peeche khadi hai kya?'
+];
+let peekIdx = 0, peekTimer;
+function startPeek(){
+  clearInterval(peekTimer);
+  peekTimer = setInterval(()=>{ $('#bubble').textContent = peekLines[++peekIdx % peekLines.length]; },3200);
+}
+function setMsg(t,bad){ const m = $('#msg'); m.textContent = t; m.className = bad ? 'bad' : ''; }
+let calmTimer;
+$('#pwInput').addEventListener('input', () => {
+  if(busy) return;
+  setMood(passChar,'whistle');
+  $('#bubble').textContent = 'Main to siti baja raha hoon, kuch nahi dekha.';
+  setMsg('');
+  clearTimeout(calmTimer);
+  calmTimer = setTimeout(()=>setMood(passChar,'peek'),1300);
+});
+$('#pwInput').addEventListener('keydown', e => { if(e.key === 'Enter') tryPass(); });
+$('#enter').onclick = tryPass;
+$('#back').onclick = () => { clearInterval(peekTimer); show('gate'); };
+
+let tries = 0, busy = false;
+async function tryPass(){
+  if(busy) return;
+  const v = $('#pwInput').value;
+  if(!v) return setMsg('Kuch to likh, bhai.', true);
+  let ok = false;
+  try { ok = (await sha(v)) === OWNER_HASH; } catch(e){ return setMsg(e.message, true); }
+  busy = true; clearTimeout(calmTimer);
+  if (ok){
+    clearInterval(peekTimer); owner = true;
+    setMood(passChar,'happy'); setMsg('');
+    setTimeout(() => {
+      show('welcome'); setMood(welChar,'happy');
+      setTimeout(()=>setMood(welChar,'cool'),1100);
+      setTimeout(()=>{ openApp(); busy = false; },3400);
+    },800);
+    return;
+  }
+  tries++;
+  const pw = $('#pw'); pw.classList.remove('shake'); void pw.offsetWidth; pw.classList.add('shake');
+  $('#pwInput').value = '';
+  const lines = ['Galat! Tu Shubhanshu hi hai na?','Phir galat. Police bulaun kya?'];
+  if (tries < 3){
+    setMood(passChar,'shock'); setMsg(lines[tries-1], true);
+    setTimeout(()=>{ setMood(passChar,'peek'); busy = false; },1300);
+  } else {
+    setMood(passChar,'angry'); setMsg('Nakli Shubhanshu pakda gaya. Guest mode me bhej raha hoon…', true);
+    clearInterval(peekTimer); tries = 0;
+    setTimeout(()=>{ owner = false; openApp(); busy = false; },2400);
+  }
+}
+
+/* ---------- modal helper ---------- */
+function ask({title, text='', input=null, value='', ok='OK', danger=false}){
+  return new Promise(res => {
+    const m = $('#modal');
+    m.innerHTML = `<div class="box" role="dialog" aria-modal="true"><h2>${esc(title)}</h2>${text?`<p>${esc(text)}</p>`:''}
+      ${input?`<input id="mi" type="${input}" value="${esc(value)}" autocomplete="off">`:''}
+      <div class="row"><button class="btn" id="mc">Cancel</button><button class="btn ${danger?'danger':'primary'}" id="mo">${esc(ok)}</button></div></div>`;
+    m.classList.remove('hidden');
+    const inp = $('#mi'); if(inp) setTimeout(()=>inp.focus(),30);
+    const close = v => { m.classList.add('hidden'); m.innerHTML=''; document.removeEventListener('keydown',key); res(v); };
+    const key = e => { if(e.key==='Escape') close(null); if(e.key==='Enter') done(); };
+    const done = () => close(input ? $('#mi').value : true);
+    $('#mc').onclick = () => close(null); $('#mo').onclick = done;
+    document.addEventListener('keydown', key);
+  });
+}
+
+/* ---------- app ---------- */
+function renderTools(){
+  $('#chip').textContent = owner ? 'Owner · full access' : 'Guest · sirf dekh sakte ho';
+  $('#chip').className = 'chip' + (owner ? ' owner' : '');
+  $('#tools').innerHTML = owner
+    ? '<button class="btn primary sm" id="upBtn">+ Upload</button><button class="btn sm" id="outBtn">Lock up</button>'
+    : '<button class="btn sm" id="ownBtn">Main Shubhanshu hoon</button>';
+  if(owner){ $('#upBtn').onclick = () => $('#file').click(); $('#outBtn').onclick = () => { owner=false; renderTools(); render(); }; }
+  else { $('#ownBtn').onclick = () => { $('#app').classList.add('hidden'); document.body.classList.remove('inapp'); document.body.classList.add('cine'); setMood(gateChar,'sus'); show('gate'); }; }
+}
+
+function render(){
+  const n = $('#notice');
+  if(!configured){
+    n.classList.remove('hidden');
+    n.textContent = 'Firebase config abhi paste nahi hua. File ke upar firebaseConfig me apni values daalo, phir page reload karo.';
+  } else n.classList.add('hidden');
+
+  $('#grid').innerHTML = items.map(it => {
+    const locked = !!it.lockHash;
+    const isVid = it.type.startsWith('video');
+    const blur = locked && !owner;
+    const media = isVid ? `<video src="${esc(it.url)}#t=0.5" preload="metadata" muted playsinline></video>` : `<img src="${esc(it.url)}" alt="${esc(it.name)}" loading="lazy">`;
+    return `<article class="card" data-id="${it.id}">
+      <button class="thumb ${blur?'locked':''}" data-act="open" aria-label="${esc(it.name)} kholo">${media}
+        ${blur?'<span class="lockmark">🔒</span>':''}
+        <span class="badge">${isVid?'▶ Video':'Photo'}${locked&&owner?' · 🔒':''}</span></button>
+      <div class="meta"><span class="name">${esc(it.name)}</span><span class="info">${fmtDate(it.createdAt)} · ${fmtSize(it.size||0)}</span></div>
+      ${owner?`<div class="acts"><button class="btn sm" data-act="edit">Edit</button>
+        <button class="btn sm" data-act="lock">${locked?'Unlock':'Lock'}</button>
+        <button class="btn sm danger" data-act="del">Delete</button></div>`:''}
+    </article>`;
+  }).join('');
+  const e = $('#empty');
+  e.classList.toggle('hidden', items.length>0);
+  e.textContent = owner ? 'Abhi kuch nahi hai. + Upload se pehli photo ya video daalo.' : 'Abhi kuch upload nahi hua hai.';
+}
+
+$('#grid').addEventListener('click', async ev => {
+  const b = ev.target.closest('[data-act]'); if(!b) return;
+  const it = items.find(x => x.id === b.closest('.card').dataset.id); if(!it) return;
+  const act = b.dataset.act;
+  if(act === 'open'){
+    if(it.lockHash && !owner){
+      const p = await ask({title:'Ye item locked hai', text:'Dekhne ke liye password daalo.', input:'password', ok:'Kholo'});
+      if(p === null) return;
+      try { if(await sha(p) !== it.lockHash) return ask({title:'Galat password 🚫', ok:'Theek hai'}); }
+      catch(e){ return ask({title:e.message, ok:'Theek hai'}); }
+    }
+    return openViewer(it);
+  }
+  if(!owner) return;
+  if(act === 'edit'){
+    const v = await ask({title:'Naam badlo', input:'text', value:it.name, ok:'Save'});
+    if(v && v.trim()) db.collection('media').doc(it.id).update({name:v.trim()});
+  }
+  if(act === 'lock'){
+    if(it.lockHash){
+      if(await ask({title:'Lock hata dein?', text:'Ye item sabko dikhne lagega.', ok:'Unlock'}))
+        db.collection('media').doc(it.id).update({lockHash:firebase.firestore.FieldValue.delete()});
+    } else {
+      const p = await ask({title:'Is item ka password set karo', text:'Guest ko ye item kholne ke liye ye password dena hoga.', input:'password', ok:'Lock karo'});
+      if(p) db.collection('media').doc(it.id).update({lockHash: await sha(p)});
+    }
+  }
+  if(act === 'del'){
+    if(await ask({title:'Delete kar dein?', text:`"${it.name}" hamesha ke liye hat jayega.`, ok:'Delete', danger:true})){
+      try { await storage.ref(it.path).delete(); } catch(e){ console.warn(e); }
+      db.collection('media').doc(it.id).delete();
+    }
+  }
+});
+
+function openViewer(it){
+  const v = $('#viewer');
+  const media = it.type.startsWith('video') ? `<video src="${esc(it.url)}" controls autoplay playsinline></video>` : `<img src="${esc(it.url)}" alt="${esc(it.name)}">`;
+  v.innerHTML = `<button class="btn sm x" id="vx">Close ✕</button>${media}<div class="cap">${esc(it.name)}</div>`;
+  v.classList.remove('hidden');
+  const close = () => { v.classList.add('hidden'); v.innerHTML=''; document.removeEventListener('keydown',k); };
+  const k = e => { if(e.key==='Escape') close(); };
+  $('#vx').onclick = close; document.addEventListener('keydown',k);
+  v.onclick = e => { if(e.target === v) close(); };
+}
+
+/* ---------- upload ---------- */
+$('#file').addEventListener('change', e => {
+  if(!configured) return ask({title:'Firebase config missing', text:'Pehle firebaseConfig paste karo.', ok:'Theek hai'});
+  [...e.target.files].forEach(upload); e.target.value = '';
+});
+function upload(file){
+  const box = document.createElement('div'); box.className = 'up';
+  box.innerHTML = `<div>${esc(file.name)}</div><div class="bar"><i></i></div>`;
+  $('#uploads').prepend(box);
+  const fail = t => { box.firstElementChild.textContent = file.name + ' — ' + t; setTimeout(()=>box.remove(),5000); };
+  if(!/^(image|video)\//.test(file.type)) return fail('sirf photo ya video allowed');
+  if(file.size > MAX_MB*1e6) return fail(`${MAX_MB} MB se badi file`);
+  const path = 'media/' + Date.now() + '_' + file.name.replace(/[^\w.\-]+/g,'_');
+  const task = storage.ref(path).put(file, {contentType:file.type});
+  task.on('state_changed',
+    s => box.querySelector('i').style.width = (s.bytesTransferred/s.totalBytes*100) + '%',
+    err => fail('upload fail: ' + err.code),
+    async () => {
+      const url = await task.snapshot.ref.getDownloadURL();
+      await db.collection('media').add({name:file.name.replace(/\.[^.]+$/,''), url, path, type:file.type, size:file.size,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()});
+      box.remove();
+    });
+}
+
+if(configured){
+  db.collection('media').orderBy('createdAt','desc').onSnapshot(snap => {
+    items = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    if(!$('#app').classList.contains('hidden')) render();
+  }, err => { items = []; $('#notice').classList.remove('hidden'); $('#notice').textContent = 'Data load nahi hua: ' + err.code + '. Firestore rules check karo.'; });
+}
+</script>
+</body>
+</html>
